@@ -32,7 +32,7 @@ func (gw *GW) initLogId() {
 }
 
 // set handler func
-func (gw *GW) BindFunc(path string, fn func(gw *GW)(string)) (*GW) {
+func (gw *GW) BindFunc(path string, fn func(gw *GW) (string)) (*GW) {
 	http.HandleFunc(path, func(writer http.ResponseWriter, request *http.Request) {
 		gw.initLogId()
 		request.ParseForm()
@@ -74,13 +74,13 @@ func (gw *GW) Run(port int) {
 }
 
 // get config content
-func (gw *GW) GetCfg(path string) (cfg []byte) {
+func (gw *GW) GetCfg(path string) ([]byte) {
 	if filename, err := filepath.Abs(path); nil == err {
 		if bytes, err := ioutil.ReadFile(filename); nil == err {
 			return bytes
 		}
 	}
-	return cfg
+	return []byte("")
 }
 
 // GET query data
@@ -94,9 +94,15 @@ func (gw *GW) Post(key string) (string) {
 }
 
 // Http Get
-func (gw *GW) HttpGet() (string) {
-
-	return ""
+func (gw *GW) HttpGet(url string) ([]byte) {
+	res, err := http.Get(url)
+	if nil == err {
+		bytes, err := ioutil.ReadAll(res.Body)
+		if nil == err {
+			return bytes
+		}
+	}
+	return []byte("")
 }
 
 // Curl Post

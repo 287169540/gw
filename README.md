@@ -1,6 +1,6 @@
 
 ###### http service demo
-```
+```$xslt
 package main
 
 import (
@@ -20,4 +20,21 @@ func main() {
 	gw.SetStaticFileDir("/static/", "static")
 	gw.Run(8082)
 }
+```
+
+###### http get
+```$xslt
+package main
+
+import (
+	"fmt"
+	gw2 "gw"
+)
+
+func main() {
+	gw := gw2.New("hehe")
+	rs := gw.HttpGet("http://www.baidu.com")
+	fmt.Println(string(rs))
+}
+
 ```
