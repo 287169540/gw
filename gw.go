@@ -2,19 +2,21 @@ package gw
 
 import (
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
+	"path/filepath"
 	"time"
 )
 
 type GW struct {
-	R     *http.Request
+	R        *http.Request
 	logTitle string
-	logId string
+	logId    string
 }
 
 // create new gw
-func New(logTitle string)(* GW){
+func New(logTitle string) (*GW) {
 	gw := new(GW)
 	gw.logTitle = logTitle
 	return gw
@@ -66,9 +68,13 @@ func (gw *GW) Run(port int) {
 }
 
 // get config content
-func (gw *GW) GetCfg(path string) (txt string) {
-
-	return ""
+func (gw *GW) GetCfg(path string) (cfg []byte) {
+	if filename, err := filepath.Abs(path); nil == err {
+		if bytes, err := ioutil.ReadFile(filename); nil == err {
+			return bytes
+		}
+	}
+	return cfg
 }
 
 // GET query data
