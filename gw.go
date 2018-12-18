@@ -61,6 +61,12 @@ func (gw *GW) logW(log string) {
 	fmt.Printf("%v output %v \n", gw.logId, log)
 }
 
+// set static file service
+func (gw *GW) SetStaticFileService(url string, dir string) {
+	fs := http.FileServer(http.Dir(dir))
+	http.Handle(url, http.StripPrefix(url, fs))
+}
+
 // run a server instance
 func (gw *GW) Run(port int) {
 	addr := fmt.Sprintf(":%d", port)
