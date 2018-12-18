@@ -32,14 +32,14 @@ func (gw *GW) initLogId() {
 }
 
 // set handler func
-func (gw *GW) BindFunc(path string, fn func() (string)) (*GW) {
+func (gw *GW) BindFunc(path string, fn func(gw *GW)(string)) (*GW) {
 	http.HandleFunc(path, func(writer http.ResponseWriter, request *http.Request) {
 		gw.initLogId()
 		request.ParseForm()
 		request.ParseMultipartForm(1024 * 1024 * 2)
 		gw.R = request
 		gw.logR()
-		html := fn()
+		html := fn(gw)
 		gw.logW(html)
 		fmt.Fprint(writer, html)
 	})
@@ -62,7 +62,7 @@ func (gw *GW) logW(log string) {
 }
 
 // set static file service
-func (gw *GW) SetStaticFileService(url string, dir string) {
+func (gw *GW) SetStaticFileDir(url string, dir string) {
 	fs := http.FileServer(http.Dir(dir))
 	http.Handle(url, http.StripPrefix(url, fs))
 }
@@ -85,11 +85,22 @@ func (gw *GW) GetCfg(path string) (cfg []byte) {
 
 // GET query data
 func (gw *GW) Get(key string) (string) {
-	fmt.Println(key)
 	return gw.R.URL.Query().Get(key)
 }
 
 // POST query data
 func (gw *GW) Post(key string) (string) {
 	return gw.R.PostForm.Get(key)
+}
+
+// Http Get
+func (gw *GW) HttpGet() (string) {
+
+	return ""
+}
+
+// Curl Post
+func (gw *GW) HttpPost() (string) {
+
+	return ""
 }
