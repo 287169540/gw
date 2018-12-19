@@ -38,3 +38,23 @@ func main() {
 }
 
 ```
+
+###### http post
+```cassandraql
+package main
+
+import (
+	"fmt"
+	gw2 "gw"
+	"net/url"
+)
+
+func main() {
+	gw := gw2.New("hehe")
+	data:= url.Values{}
+	data.Set("name", "rj")
+	data.Set("age", "12")
+	rs:=gw.HttpPost("http://www.baidu.com",data)
+	fmt.Println(string(rs))
+}
+```

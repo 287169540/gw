@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"path/filepath"
 	"time"
 )
@@ -106,7 +107,11 @@ func (gw *GW) HttpGet(url string) ([]byte) {
 }
 
 // Curl Post
-func (gw *GW) HttpPost() (string) {
-
-	return ""
+func (gw *GW) HttpPost(url string, data url.Values) ([]byte) {
+	if res, err := http.PostForm(url, data); nil == err {
+		if bytes, err := ioutil.ReadAll(res.Body); nil == err {
+			return bytes;
+		}
+	}
+	return []byte("");
 }
